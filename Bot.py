@@ -18,7 +18,8 @@ def send_welcome(message):
 
 
 
-    bot.send_message(message.chat.id, 'РЕКВИЗИТЫ')
+    with open('img/join.jpg', 'rb') as photo:
+            bot.send_photo(message.chat.id, photo=photo, caption='РЕКВИЗИТЫ', reply_markup=keyboard)
 
 
 
