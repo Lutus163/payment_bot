@@ -10,30 +10,30 @@ bot = telebot.TeleBot(TOKEN)
 OWNER_CHAT_ID = 1194493488
 
 @bot.message_handler(commands=['start'])
-def send_welcome(message):
+def start(message):
     with open('img/join.jpg', 'rb') as photo:
-        bot.send_photo(message.chat.id, photo=photo, caption='ИНСТРУКЦИЯ С РЕКВИЗИТАМИ')
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        button = types.KeyboardButton("Оплата")
+        keyboard.add(button)
+        bot.send_photo(message.chat.id, photo=photo, caption='"Реквизиты"\nНапишите боту сообщение "Оплата" или нажмите на кнопку', reply_markup=keyboard)
 
-@bot.message_handler(func=lambda message: message.text == "Оплата")
-def handle_payment_message(message):
-    bot.reply_to(message, 'Пожалуйста, отправьте фото скриншота оплаты.')
+@bot.message_handler(func=lambda message: message.text.lower() == 'оплата')
+def handle_payment(message):
+    bot.send_message(message.chat.id, 'Отправьте сюда скриншот с переводом.')
 
 @bot.message_handler(content_types=['photo'])
 def handle_photo(message):
-    # Проверяем, является ли это сообщением, на которое бот должен реагировать
-    if message.reply_to_message and message.reply_to_message.text == 'Пожалуйста, отправьте фото скриншота оплаты.':
-        try:
-            file_info = bot.get_file(message.photo[-1].file_id)  # Берем максимальное качество фото
-            downloaded_file = bot.download_file(file_info.file_path)
-            
-            # Отправляем фото владельцу
-            bot.send_photo(OWNER_CHAT_ID, downloaded_file)
+    file_info = bot.get_file(message.photo[-1].file_id)  # Получаем информацию о фото
+    downloaded_file = bot.download_file(file_info.file_path)  # Скачиваем фото
 
-            # Подтверждение для пользователя
-            bot.reply_to(message, 'Скриншот был отправлен владельцу, ожидайте подтверждения.')
-        except Exception as e:
-            print(f"Произошла ошибка: {e}")
-            bot.reply_to(message, 'Произошла ошибка при отправке скриншота. Попробуйте ещё раз.')  
+    # Сохраняем фото на диск (если нужно) 
+    with open('photo.jpg', 'wb') as new_file:
+        new_file.write(downloaded_file)
+
+    # Пересылаем фото владельцу
+    bot.send_photo(OWNER_CHAT_ID, downloaded_file)
+    bot.send_message(message.chat.id, 'Ваш скриншот об оплате был отправлен, ожидайте подтверждения.')
+
 
 
  
