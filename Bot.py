@@ -23,15 +23,16 @@ def handle_payment(message):
 
 @bot.message_handler(content_types=['photo'])
 def handle_photo(message):
-    file_info = bot.get_file(message.photo[-1].file_id)  # Получаем информацию о фото
-    downloaded_file = bot.download_file(file_info.file_path)  # Скачиваем фото
-    
-    # Сохраняем фото на диск (если нужно) 
-    #with open('photo.jpg', 'wb') as new_file:
-        #new_file.write(downloaded_file)
+    file_info = bot.get_file(message.photo[-1].file_id)
+    downloaded_file = bot.download_file(file_info.file_path)
 
-    # Пересылаем фото владельцу
-    bot.send_photo(OWNER_CHAT_ID, downloaded_file)  
+    # Формируем информацию об отправителе
+    sender_info = f'Отправитель: @{message.from_user.username}\n' \
+                  f'Имя: {message.from_user.first_name} {message.from_user.last_name}\n' \
+                  f'ID: {message.from_user.id}'
+
+    # Отправляем фото и информацию владельцу
+    bot.send_photo(OWNER_CHAT_ID, downloaded_file, caption=sender_info)
     bot.send_message(message.chat.id, 'Ваш скриншот об оплате был отправлен, ожидайте подтверждения.')
 
 
