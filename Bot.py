@@ -9,7 +9,7 @@ TOKEN = '6779027788:AAGrfHq5F11bvIfW0Gnw6uGpZ9xAr6pVI_k'
 bot = telebot.TeleBot(TOKEN)
 OWNER_CHAT_ID = 1194493488
 
-<<<<<<< HEAD
+
 @bot.message_handler(commands=['start'])
 def start(message):
     with open('/tg_bot/img/start.png', 'rb') as photo:
@@ -21,11 +21,11 @@ def start(message):
 @bot.message_handler(func=lambda message: message.text.lower() == 'оплата')
 def handle_payment(message):
     bot.send_message(message.chat.id, 'Как оплатить?👇🏻\nТ-Банк: 2200700402852221\n\nКаспи Казахстан: 4400430276906358\n\nПосле оплаты отправьте сюда скриншот с переводом🙏🏻')
-=======
+
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
 
->>>>>>> e1b425f3332424cc3764acbc51f49f384835f9f4
+
 
 def start_bot():
     try:
