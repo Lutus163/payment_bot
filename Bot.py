@@ -31,7 +31,7 @@ def start_bot():
     try:
         @bot.message_handler(commands=['start'])
         def start(message):
-            with open('img/start.png', 'rb') as photo:
+            with open('/tg_bot/img/start.png', 'rb') as photo:
                 keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 button = types.KeyboardButton("Оплата")
                 keyboard.add(button)
